@@ -64,7 +64,7 @@ public class FormTest {
     public class FieldCityTests {
 
         @Test
-        void shouldSubmitRequestIfCityWithSmallLetter() {
+        void shouldNotSubmitRequestIfCityWithSmallLetter() {
             open("http://localhost:9999");
             SelenideElement form = $("[action]");
             form.$(cssSelector("[data-test-id=city] input")).sendKeys("москва");
@@ -75,7 +75,7 @@ public class FormTest {
             form.$(cssSelector("[name=phone]")).sendKeys("+79111235678");
             form.$(cssSelector("[data-test-id=agreement]")).click();
             form.$(byText("Забронировать")).click();
-            $(cssSelector(".notification__title")).waitUntil(Condition.visible, 15000);
+            $(byText("Поле обязательно для заполнения")).waitUntil(Condition.visible, 15000);
         }
 
         @Test
@@ -191,7 +191,7 @@ public class FormTest {
     public class FieldNameTests {
 
         @Test
-        void shouldSubmitRequestIfInSmallLetters() {
+        void shouldNotSubmitRequestIfInSmallLetters() {
             open("http://localhost:9999");
             SelenideElement form = $("[action]");
             form.$(cssSelector("[data-test-id=city] input")).sendKeys("Москва");
@@ -202,7 +202,7 @@ public class FormTest {
             form.$(cssSelector("[name=phone]")).sendKeys("+79111235678");
             form.$(cssSelector("[data-test-id=agreement]")).click();
             form.$(byText("Забронировать")).click();
-            $(cssSelector(".notification__title")).waitUntil(Condition.visible, 15000);
+            $(byText("Поле обязательно для заполнения")).waitUntil(Condition.visible, 15000);
         }
 
         @Test
