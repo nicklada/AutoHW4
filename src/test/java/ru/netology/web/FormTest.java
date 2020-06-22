@@ -8,6 +8,7 @@ import org.openqa.selenium.Keys;
 
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
 
@@ -20,11 +21,28 @@ public class FormTest {
 
     private LocalDate today = LocalDate.now();
     private LocalDate date = today.plusDays(7);
-    private int day = date.getDayOfMonth();
-    private String dayToFind = String.valueOf(day);
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private String todayString = today.format(formatter);
     private String dateString = date.format(formatter);
+    private LocalDate setDate = LocalDate.of(2023, 10, 8);
+    private int y = Period.between(today, setDate).getYears();
+    private int m = Period.between(today, setDate).getMonths();
+    private int d = setDate.getDayOfMonth();
+    private SelenideElement buttonYear = $(".calendar__arrow_direction_right[data-step='12']");
+    private SelenideElement buttonMonth = $(".calendar__arrow_direction_right[data-step='1']");
+
+    public void setYear() {
+        for (int i = 0; i < y; i++) {
+            buttonYear.click();
+        }
+    }
+
+    public void setMonth() {
+        for (int i = 0; i <= m; i++) {
+            buttonMonth.click();
+        }
+    }
+
 
     @Nested
     public class FullyValid {
@@ -50,8 +68,11 @@ public class FormTest {
             SelenideElement form = $("[action]");
             form.$(cssSelector("[data-test-id=city] input")).sendKeys("Мо");
             $$(".menu-item").find(exactText("Москва")).click();
-            form.$(cssSelector(".input__box .icon-button")).click();
-            $$(".calendar__day").find(exactText(dayToFind)).click();
+            form.$(cssSelector("[data-test-id=date] input")).click();
+            form.$(cssSelector(".input__icon [role=button]")).click();
+            setYear();
+            setMonth();
+            $$(".calendar__day").find(exactText(String.valueOf(d))).click();
             form.$(cssSelector("[name=name]")).sendKeys("Лада Николаева");
             form.$(cssSelector("[name=phone]")).sendKeys("+79111235678");
             form.$(cssSelector("[data-test-id=agreement]")).click();
